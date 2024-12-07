@@ -1,6 +1,7 @@
 <script lang="ts">
 	import bookCover from "$assets/book_cover.png";
 	import phoneCover from "$assets/phone_cover.png";
+	import { Button } from '$components/index';
 </script>
 
 
@@ -23,6 +24,7 @@
 			calculating my cost of living, choosing an apartment. That's why I wrote
 			this e-book, to tell you how I did it. No bullshit, no stress.
 		</p>
+		<Button>Purchase E-book for $10</Button>
 	</div>
 </section>
 
