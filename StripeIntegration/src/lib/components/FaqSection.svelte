@@ -61,7 +61,7 @@
 	<div class="additional-info mt-m">
 		<Button class="mt-s hover:border-black">BUY NOW</Button>
 		<p class="mt-m">Any other questions?</p>
-		<a href="https://github.com/MarcoBasileDev">
+		<a href="https://github.com/MarcoBasileDev" target="_blank">
 			<p>
 				Hit me up on github
 			</p>
