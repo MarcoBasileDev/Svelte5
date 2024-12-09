@@ -1,5 +1,6 @@
 <script lang="ts">
-import { HeroSection } from '$component';
+	import { AboutMeSection, HeroSection } from '$component';
 </script>
 
 <HeroSection />
+<AboutMeSection />
