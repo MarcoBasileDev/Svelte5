@@ -40,7 +40,7 @@
 							{edu.startDate} / {edu.endDate}
 						</div>
 					</div>
-					<div class="text-justify mb-1"><span class="font-bold">Final Project:</span> {edu.finalProject}</div>
+					<div class="text-justify mb-1 text-xl"><span class="font-bold">Final Project:</span> {edu.finalProject}</div>
 					<div class="border border-gray-300 mb-3"></div>
 				</article>
 			</li>

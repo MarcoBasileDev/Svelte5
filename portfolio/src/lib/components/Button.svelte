@@ -10,7 +10,10 @@
 	let { children, className, ...props }: ButtonProps = $props();
 </script>
 
-<button class={`btn bg-black text-white text-2xl py-3 px-10 mx-auto rounded ${className}`} {...props}>
+<button
+	class={`btn bg-black text-white text-2xl py-3 px-10 border-2 border-black hover:bg-white hover:text-black mx-auto rounded transition-all duration-200 ease-in-out ${className}`}
+	{...props}
+>
 	{@render children()}
 </button>
 
