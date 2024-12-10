@@ -3,6 +3,7 @@
 	import avatar from '$assets/my_avatar.svg';
 	import { goto } from '$app/navigation';
 	import type { DevExperience } from '$lib/types/sanity';
+	import EducationTable from '$component/EducationTable.svelte';
 
 	interface AboutMeProps {
 		workExperience: DevExperience;
@@ -29,4 +30,6 @@
 		</div>
 	</div>
 	<ExperienceTable {workExperience} />
+	<EducationTable />
+
 </section>

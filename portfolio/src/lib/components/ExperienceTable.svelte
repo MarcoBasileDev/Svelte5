@@ -29,7 +29,3 @@
 	</ul>
 	<h2 class="text-right">Work <br/> Experience</h2>
 </section>
-
-<style>
-
-</style>
