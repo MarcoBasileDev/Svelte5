@@ -50,7 +50,6 @@
         border-radius: 20px;
         object-fit: cover;
         cursor: pointer;
-				border: black 1px solid;
     }
 
     .more-projects-container {
