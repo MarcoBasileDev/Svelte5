@@ -2,6 +2,13 @@
 	import { Button, ExperienceTable, SectionHeadline } from '$component';
 	import avatar from '$assets/my_avatar.svg';
 	import { goto } from '$app/navigation';
+	import type { DevExperience } from '$lib/types/sanity';
+
+	interface AboutMeProps {
+		workExperience: DevExperience;
+	}
+
+	let { workExperience }: AboutMeProps = $props();
 
 	function onclick() {
 		goto("/#contact-form");
@@ -21,5 +28,5 @@
 			<Button className="mt-m" {onclick}>Tell me about your projects</Button>
 		</div>
 	</div>
-	<ExperienceTable />
+	<ExperienceTable {workExperience} />
 </section>
