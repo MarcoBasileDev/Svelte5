@@ -32,6 +32,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"@sanity/client": "^6.24.1"
+		"@sanity/client": "^6.24.1",
+		"@sanity/image-url": "^1.1.0"
 	}
 }

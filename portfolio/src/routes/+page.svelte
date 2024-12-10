@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { AboutMeSection, HeroSection } from '$component';
+	import { AboutMeSection, HeroSection, MyWorkSection } from '$component';
 
 	const { data } = $props();
-	let { workExperience } = data;
+	let { workExperience, projects } = data;
 </script>
 
 <HeroSection />
 <AboutMeSection {workExperience} />
+<MyWorkSection {projects} />

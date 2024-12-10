@@ -1,14 +1,20 @@
-import type { PageLoad } from '../../.svelte-kit/types/src/routes/$types';
-import type { DevExperience } from '$lib/types/sanity';
-import sanityClient from '$lib/utils/sanity';
+import type { PageLoad } from './$types';
+import sanityClient, { processProjectEntries } from '$lib/utils/sanity';
 
 
 export const load: PageLoad = async () => {
-	const workExperience: DevExperience[] = await sanityClient.fetch(
+	const workExperience: SanityWorkExperience[] = await sanityClient.fetch(
 		'*[_type == "devExperience"] | order(startDate desc)'
 	);
 
+	const rawProjects: SanityProject[] = await sanityClient.fetch(
+		'*[_type == "project"] | order(dateAccomplished desc)'
+	);
+
+	const projects = rawProjects.map(processProjectEntries);
+
 	return {
 		workExperience,
+		projects
 	};
 }
