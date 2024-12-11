@@ -1,20 +1,70 @@
 <script lang="ts">
 	import { Button, SectionHeadline } from '$component';
 
-	function onsubmit(event: Event) {
+	let contactName = $state("");
+	let contactEmail = $state("");
+	let projectInformation = $state("");
+	let isformInvalid = $state(false);
+	let isEmailSent = $state(false);
+	let showErrorMessage = $state(false);
+	let isLoading = $state(false);
+
+	async function onsubmit(event: Event) {
 		event.preventDefault();
+
+		if (contactName && contactEmail && projectInformation) {
+			isLoading = true;
+			const response = await fetch("/api/send-mail", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					contactName,
+					contactEmail,
+					projectInformation
+				})
+			});
+			isLoading = false;
+			if (response.ok) {
+				isEmailSent = true;
+			} else {
+				showErrorMessage = true;
+			}
+		} else {
+			isformInvalid = true;
+		}
 	}
+
+	$effect(() => {
+		if (contactName || contactEmail || projectInformation) {
+			isformInvalid = false;
+		}
+	})
 </script>
 
 <section class="mt-l pb-36">
 	<SectionHeadline sectionName="contact-form">Let's talk</SectionHeadline>
 	<div class="flex justify-between default-margin mt-m">
-		<form class="flex flex-col items-start">
-			<input class="text-input mb-m h-12" placeholder="Your name" />
-			<input class="text-input mb-m h-12" placeholder="Your email" />
-			<textarea class="h-36 mb-10" placeholder="Tell me about your project"></textarea>
-			<Button onclick={onsubmit}>Submit</Button>
-		</form>
+		{#if isEmailSent}
+			<div class="spinner-container">
+				<h3>Thank you for getting in contact with me. I'll usually reply within 48 hours. </h3>
+			</div>
+		{:else if isLoading}
+			<div class="spinner-container">
+				<div class="spinner"></div>
+				<h3>Sending...</h3>
+			</div>
+		{:else if showErrorMessage}
+			<h3>We seem to have trouble with our server at the moment.<br/> Please try again later!</h3>
+		{:else}
+			<form class="flex flex-col items-start">
+				<input class="text-input mb-m h-12" placeholder="Your name" bind:value={contactName} class:input-error={isformInvalid && !contactName.length}/>
+				<input class="text-input mb-m h-12" placeholder="Your email" bind:value={contactEmail} class:input-error={isformInvalid && !contactEmail.length} />
+				<textarea class="h-36 mb-10" placeholder="Tell me about your project" bind:value={projectInformation} class:input-error={isformInvalid && !projectInformation.length}></textarea>
+				<Button onclick={onsubmit}>Submit</Button>
+			</form>
+		{/if}
 		<div class="w-1/2">
 			<h3 class="bold mb-s text-2xl">I'd love to hear more about your project</h3>
 			<p class="text-justify text-lg">
@@ -61,7 +111,7 @@
     }
 
     .input-error {
-        background-color: rgba(223, 87, 87, 0.667);
+        background-color: rgba(255, 27, 27, 0.70);
     }
 
     .input-error::placeholder {
