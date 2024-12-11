@@ -11,7 +11,7 @@
 </script>
 
 <button
-	class={`btn bg-black text-white text-2xl py-3 px-10 border-2 border-black hover:bg-white hover:text-black mx-auto rounded transition-all duration-200 ease-in-out ${className}`}
+	class={`btn bg-black text-white text-2xl py-3 px-10 border-2 border-black hover:bg-white hover:text-black rounded transition-all duration-200 ease-in-out ${className}`}
 	{...props}
 >
 	{@render children()}

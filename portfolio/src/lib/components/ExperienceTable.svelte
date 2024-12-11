@@ -8,7 +8,7 @@
 
 </script>
 
-<section class="default-margin flex justify-between w-full mt-m">
+<section class="default-margin flex justify-between w-full mt-l">
 	<ul class="w-1/2">
 		{#each workExperience as job}
 			<li class="work-item">

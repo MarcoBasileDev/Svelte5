@@ -27,7 +27,7 @@
 
 </script>
 
-<section class="default-margin flex justify-between w-full mt-m">
+<section class="default-margin flex justify-between w-full mt-l">
 	<h2 class="text-right">Education</h2>
 	<ul class="w-1/2">
 		{#each educationExperiences as edu}

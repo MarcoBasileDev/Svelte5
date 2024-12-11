@@ -92,9 +92,8 @@ p {
 }
 
 .default-margin {
-    margin-left: 15vw;
-    margin-right: 15vw;
     max-width: 1280px;
+    margin: 0 auto;
 }
 
 .underscore {
