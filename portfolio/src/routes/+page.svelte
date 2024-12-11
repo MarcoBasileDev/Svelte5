@@ -2,7 +2,8 @@
 	import { AboutMeSection, HeroSection, MyWorkSection } from '$component';
 
 	const { data } = $props();
-	let { workExperience, projects } = data;
+	let { workExperience, projects, skills } = data;
+	$inspect(skills)
 </script>
 
 <HeroSection />
