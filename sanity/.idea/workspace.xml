@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="126bddf8-0621-4c80-8e79-d11531db29ab" name="Changes" comment="add working experience schema">
-      <change afterPath="$PROJECT_DIR$/../portfolio/src/routes/work/[slug]/+page.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../portfolio/src/routes/work/[slug]/+page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../portfolio/src/lib/components/sections/MyWorkSection.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../portfolio/src/lib/components/sections/MyWorkSection.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

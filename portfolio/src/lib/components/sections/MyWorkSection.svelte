@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SectionHeadline } from '$lib/components';
+	import { Button, SectionHeadline } from '$lib/components';
 
 	interface MyWorkSectionProps {
 		project: ProcessedProject[];
@@ -36,12 +36,19 @@
 							<h3 class="semi-bold">{project.name}</h3>
 							<p class="company dark-grey">{project.company}</p>
 						</div>
-						<a href={`/work/${project.slug}`} class="block w-24 border-2 border-black text-4xl text-center pb-2 rounded-full hover:text-white hover:bg-black">→</a>
+						<a href={`/work/${project.slug}`} class="block w-24 border-2 border-black text-4xl text-center pb-2 rounded-full hover:text-white hover:bg-black focus:bg-white focus:text-black">→</a>
 					</div>
 				</article>
 			{/each}
 		</div>
+		<div class="flex mt-14 justify-center">
+			<a href="https://github.com/MarcoBasileDev" target="_blank"
+				 class="font-semibold bg-black text-white text-2xl py-3 px-10 border-2 border-black hover:bg-white hover:text-black visited:text-white mx-auto rounded transition-all duration-200 ease-in-out">
+				All projects
+			</a>
+		</div>
 	</div>
+
 </section>
 
 <style>
