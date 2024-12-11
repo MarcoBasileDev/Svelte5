@@ -9,7 +9,7 @@ export async function POST({ request }) {
 		await request.json();
 
 	if (!contactMail || !contactName || !informationAboutProject) {
-		return json({ message: "Could not send email. Missing data." }, { status: 400 });
+		json({ message: "Could not send email. Missing data." }, { status: 400 });
 	}
 
 	const message = {
