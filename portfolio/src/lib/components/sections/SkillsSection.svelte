@@ -10,7 +10,7 @@
 </script>
 
 <section class="mt-l">
-	<SectionHeadline sectionName="Skills">Skills</SectionHeadline>
+	<SectionHeadline sectionName="skills">Skills</SectionHeadline>
 	<div class="flex flex-col items-center justify-center default-margin mt-l">
 		<div class="grid grid-cols-4 gap-10">
 			{#each skills as skill}
