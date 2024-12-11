@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Button, SectionHeadline } from '$lib/components';
+	import { SectionHeadline } from '$lib/components';
 
 	interface MyWorkSectionProps {
-		project: ProcessedProject[];
+		projects: ProcessedProject[];
 	}
 
 	let { projects }: MyWorkSectionProps = $props();
