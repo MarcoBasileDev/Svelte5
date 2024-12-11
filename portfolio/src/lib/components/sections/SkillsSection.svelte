@@ -11,10 +11,10 @@
 
 <section class="mt-l">
 	<SectionHeadline sectionName="Skills">Skills</SectionHeadline>
-	<div class="default-margin mt-l">
-		<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-center">
+	<div class="flex flex-col items-center justify-center default-margin mt-l">
+		<div class="grid grid-cols-4 gap-10">
 			{#each skills as skill}
-				<div class="flex justify-center items-center w-12 h-12">{@html skill.iconClass}</div>
+				<div class="w-16 h-16">{@html skill.iconClass}</div>
 			{/each}
 		</div>
 	</div>
