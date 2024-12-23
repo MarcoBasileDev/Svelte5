@@ -1,4 +1,6 @@
-import type { Actions } from '@sveltejs/kit';
+import { type Actions, fail, redirect } from '@sveltejs/kit';
+import { createClient } from '@supabase/supabase-js';
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 
 interface registerReturnObject {
 	success: boolean;
@@ -6,7 +8,7 @@ interface registerReturnObject {
 }
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 
 		const name = formData.get("name") as string;
@@ -44,6 +46,17 @@ export const actions = {
 			return returnObject;
 		}
 
-		return returnObject;
+		const { data, error } = await supabase.auth.signUp({
+			email,
+			password,
+			});
+
+		if (error || !data.user) {
+			console.log("there has been an error", error);
+			returnObject.success = false;
+			return fail(400, returnObject as any);
+		}
+
+		redirect(303, "/private/dashboard");
 	}
 }
