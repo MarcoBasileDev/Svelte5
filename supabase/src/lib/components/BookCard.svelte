@@ -40,7 +40,6 @@
 		<p class="mb-s">{book.author}</p>
 		<p>Rating: {book.rating}</p>
 	</div>
-
 </a>
 
 
