@@ -1,4 +1,5 @@
 import { type Session, SupabaseClient, type User } from '@supabase/supabase-js';
+import { getContext, setContext } from 'svelte';
 
 interface UserStateProps {
 	session: Session | null;
@@ -6,7 +7,7 @@ interface UserStateProps {
 	user: User | null;
 }
 
-export class UserState {
+export class UserStateSvelte {
 	session = $state<Session | null>(null);
 	supabase = $state<SupabaseClient | null>(null);
 	user = $state<User | null>(null);
@@ -21,4 +22,18 @@ export class UserState {
 		this.user = data.user;
 	}
 
+	async logout() {
+		await this.supabase?.auth.signOut();
+	}
+
+}
+
+const USER_STATE_KEY = Symbol("USER_STATE");
+
+export function setUserState(data: UserStateProps) {
+	return setContext(USER_STATE_KEY, new UserStateSvelte(data));
+}
+
+export function getUserState() {
+	return getContext<ReturnType<typeof setUserState>>(USER_STATE_KEY);
 }
