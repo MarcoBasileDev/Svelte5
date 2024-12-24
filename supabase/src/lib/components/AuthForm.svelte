@@ -112,9 +112,4 @@
     .auth-form input:last-of-type {
         margin-bottom: 30px;
     }
-
-    .social-login {
-        padding-left: 80px;
-        width: 40%;
-    }
 </style>
