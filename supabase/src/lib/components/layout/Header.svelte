@@ -2,9 +2,17 @@
 	import bookNestLogo from "$assets/app-logo.svg";
 	import { Button } from '$components';
 	import { getUserState } from '$lib/state/user-state.svelte';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let userContext = getUserState();
 	let { user, userName } = $derived(userContext);
+
+	onMount(() => {
+		if(userContext) {
+			goto("/private/dashboard");
+		}
+	})
 
 </script>
 
