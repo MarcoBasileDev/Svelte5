@@ -8,10 +8,25 @@ interface UserStateProps {
 	user: User | null;
 }
 
+interface Book {
+	author: string | null
+	cover_image: string | null
+	created_at: string
+	description: string | null
+	finished_reading_on: string | null
+	genre: string | null
+	id: number
+	rating: number | null
+	started_reading_on: string | null
+	title: string | null
+	user_id: string
+}
+
 export class UserStateSvelte {
 	session = $state<Session | null>(null);
 	supabase = $state<SupabaseClient | null>(null);
 	user = $state<User | null>(null);
+	allBooks = $state<Book[]>([]);
 
 	constructor(data: UserStateProps) {
 		this.updateState(data);
