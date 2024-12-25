@@ -35,7 +35,7 @@
 					class="star-icon"
 					style="--fill: {value > i ? 'gold' : 'rgba(100, 100, 100, 0.15)'}"
 				>
-					*
+					★
 				</span>
 			</button>
 		{/each}
