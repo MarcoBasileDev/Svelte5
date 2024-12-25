@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Button } from '$components';
-	import type { ActionData } from '../../../.svelte-kit/types/src/routes/register/$types';
+	import { Button } from "$components";
+	import type { ActionData } from "../../routes/register/$types";
 
 	interface ComponentProps {
 		isRegistration: boolean;
@@ -10,11 +10,14 @@
 	let { isRegistration, form }: ComponentProps = $props();
 </script>
 
-
 <div class="default-margin auth-container">
 	<h1 class="mb-l">{isRegistration ? "Register" : "Login"}</h1>
 	<div class="form-and-social-login">
-		<form class="auth-form" method="POST">
+		<form
+			class="auth-form"
+			method="POST"
+			action={isRegistration ? "" : "/login/?/signInWithPassword"}
+		>
 			{#if form && form.errors?.length}
 				{#each form.errors as error}
 					<div class="auth-error">
@@ -22,34 +25,45 @@
 					</div>
 				{/each}
 			{/if}
-
 			{#if isRegistration}
-				<input placeholder="Name" type="text" name="name" />
+				<input
+					placeholder="Name"
+					type="text"
+					name="name"
+					value={form?.name || ""}
+				/>
 			{/if}
-
-			<input placeholder="Email" type="text" name="email" />
-			<input placeholder="Password" type="password" name="password" />
-
+			<input
+				placeholder="Email"
+				type="text"
+				name="email"
+				value={form?.email || ""}
+			/>
+			<input
+				placeholder="Password"
+				type="password"
+				name="password"
+				value={form?.password || ""}
+			/>
 			{#if isRegistration}
-			<input placeholder="Confirm Password" type="password" name="passwordConfirmation" />
+				<input
+					placeholder="Confirm password"
+					type="password"
+					name="passwordConfirmation"
+					value={form?.passwordConfirmation || ""}
+				/>
 			{/if}
-
 			<Button type="submit">{isRegistration ? "Register" : "Login"}</Button>
-
 			{#if isRegistration}
 				<p class="auth-hint mt-s">
-					Already have an account?
-					<a href="/login">Log In.</a>
+					Already have an account? <a href="/login">Log In.</a>
 				</p>
 			{:else}
 				<p class="auth-hint mt-s">
-					Don't have an account?
-					<a href="/register">Register.</a>
+					Do not have an account yet? <a href="/register">Register.</a>
 				</p>
 			{/if}
-
 		</form>
-		<div class="social-login"></div>
 	</div>
 </div>
 
@@ -97,10 +111,5 @@
 
     .auth-form input:last-of-type {
         margin-bottom: 30px;
-    }
-
-    .social-login {
-        padding-left: 80px;
-        width: 40%;
     }
 </style>
