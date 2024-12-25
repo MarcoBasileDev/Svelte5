@@ -20,9 +20,6 @@
 		</div>
 	</div>
 </div>
-{#each allBooks as book}
-	<BookCard {book} />
-{/each}
 
 <style>
     .dashboard-header {
