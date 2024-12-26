@@ -239,6 +239,29 @@ export class UserState {
 		await goto("/login");
 	}
 
+	async deleteAccount() {
+		if (!this.session) {
+			return;
+		}
+
+		try {
+			const response = await fetch("/api/delete-account", {
+				method: "DELETE",
+				headers: {
+					"ContentType": "application/json",
+					Authorization: `Bearer ${this.session.access_token}`,
+				}
+			});
+
+			if (response.ok) {
+				await this.logout();
+				await goto("/");
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
 }
 
 const USER_STATE_KEY = Symbol("USER_STATE");
