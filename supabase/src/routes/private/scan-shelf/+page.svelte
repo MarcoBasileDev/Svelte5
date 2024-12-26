@@ -2,15 +2,15 @@
 	import Dropzone from 'svelte-file-dropzone';
 	import Icon from '@iconify/svelte';
 	import { convertFileToBase64 } from '$lib/utils/openai-helpers';
+	import { Button } from '$components';
+	import { getUserState, type OpenAiBook } from '$lib/state/user-state.svelte';
 
+
+	let userContext = getUserState();
 	let isLoading = $state(false);
 	let errorMessage = $state("");
 	let recognizedBooks = $state<OpenAiBook[]>([]);
-
-	interface OpenAiBook {
-		author: string;
-		bookTitle: string;
-	}
+	let booksSuccessfullyAdded = $state(false);
 
 	async function handleDrop(e: CustomEvent) {
 		const { acceptedFiles} = e.detail;
@@ -40,17 +40,32 @@
 			errorMessage = "Could not upload given file. Are you sure it's an image with a file size of les than 10MB?"
 		}
 	}
+
+	function removeBook(index: number) {
+		recognizedBooks.splice(index, 1);
+	}
+
+	async function addAllBooks() {
+		isLoading = true;
+		try {
+			await userContext.addBooksToLibrary(recognizedBooks);
+			isLoading = false;
+			booksSuccessfullyAdded = true;
+		} catch (error: any) {
+			errorMessage = error.message;
+		}
+	}
 </script>
 
 <h2 class="mt-m mb-l">Take a picture to add books</h2>
-
 {#if recognizedBooks.length === 0}
 	<div class="upload-area">
 		<div class="upload-container">
 			{#if errorMessage}
-				<h4 class="text-center mb-s uploaded-error">{errorMessage}</h4>
+				<h4 class="text-center mb-s upload-error">
+					{errorMessage}
+				</h4>
 			{/if}
-
 			{#if isLoading}
 				<div class="spinner-container">
 					<div class="spinner"></div>
@@ -62,22 +77,50 @@
 					multiple={false}
 					accept="image/*"
 					maxSize={10 * 1024 * 1024}
-					containerClasses={"dropzone-cover"}
+					containerClasses={"dropzone-cover dropzone-books"}
 				>
-					<Icon icon="bi:camera-fill" width={40} height={40} />
-					<p>Drag a picture here or click to select a file</p>
-				</Dropzone>
+					<Icon icon="bi:camera-fill" width={"40px"} />
+					<p>Drag a picture here or click to select a file</p></Dropzone
+				>
 			{/if}
 		</div>
 	</div>
-{:else}
+{:else if !booksSuccessfullyAdded}
 	<div class="found-books">
-		<ul>
-			{#each recognizedBooks as book}
-				<li>{book.bookTitle}</li>
+		<table class="book-list mb-m">
+			<thead>
+			<tr>
+				<th>Title</th>
+				<th>Author</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			{#each recognizedBooks as book, index}
+				<tr>
+					<td>{book.bookTitle}</td>
+					<td>{book.author}</td>
+					<td>
+						<button
+							type="button"
+							aria-label="Remove book"
+							class="remove-book"
+							onclick={() => removeBook(index)}
+						>
+							<Icon icon="streamline:delete-1-solid" width={"24"} />
+						</button>
+					</td>
+				</tr>
 			{/each}
-		</ul>
+			</tbody>
+		</table>
+		<Button onclick={addAllBooks}>Add all books</Button>
 	</div>
+{:else}
+	<h4>
+		The selected {recognizedBooks.length} books have been added to your library.
+	</h4>
+	<Button href="/private/dashboard">Go to your library</Button>
 {/if}
 
 <style>
