@@ -24,7 +24,16 @@
 		history.back();
 	}
 
-	function toggleEditMode() {
+	async function toggleEditModeAndSaveToDatabase() {
+		if (isEditMode) {
+			await userContext.updateBook(book.id, {
+				title,
+				author,
+				description,
+				genre,
+			})
+		}
+
 		isEditMode = !isEditMode;
 	}
 
@@ -38,13 +47,17 @@
 			await userContext.updateBook(book.id, { started_reading_on: currentTimeStamp });
 		}
 	}
+
+	async function updateDatabaseRating(newRating: number) {
+		await userContext.updateBook(book.id, { rating: newRating });
+	}
 </script>
 
 {#snippet bookInfo()}
 	<h2 class="book-title mt-m">{book.title}</h2>
 	<p class="book-author">by {book.author}</p>
 	<h4 class="mt-m mb-xs semi-bold">Your rating</h4>
-	<StarRating value={book.rating || 0} />
+	<StarRating value={book.rating || 0} {updateDatabaseRating} />
 	<p class="small-font">
 		Click to {book.rating ? "change" : "give"} rating
 	</p>
@@ -80,7 +93,7 @@
 			<input class="input" bind:value={author} type="text" name="author" />
 		</div>
 		<h4 class="mt-m mb-xs semi-bold">Your rating</h4>
-		<StarRating value={book.rating || 0}/>
+		<StarRating value={book.rating || 0} {updateDatabaseRating} />
 		<p class="small-font">
 			Click to {book.rating ? "change" : "give"} rating
 		</p>
@@ -116,7 +129,7 @@
 			{/if}
 
 			<div class="buttons-container mt-m">
-				<Button isSecondary={true} onclick={toggleEditMode}>{isEditMode ? "Save changes" : "Edit"}</Button>
+				<Button isSecondary={true} onclick={toggleEditModeAndSaveToDatabase}>{isEditMode ? "Save changes" : "Edit"}</Button>
 				<Button isDanger={true} onclick={() => console.log("yo")}>Delete book from library</Button>
 			</div>
 		</div>
