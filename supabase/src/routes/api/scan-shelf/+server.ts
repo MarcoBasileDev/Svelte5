@@ -9,6 +9,7 @@ const openai = new OpenAI({
 export const POST: RequestHandler = async ({ request }) => {
 	const { base64 } = await request.json();
 
+	/*
 	const response = await openai.chat.completions.create({
 		model: "gpt-4o-mini",
 		messages: [
@@ -37,23 +38,26 @@ export const POST: RequestHandler = async ({ request }) => {
 		],
 	});
 
+
 	const bookArrayString = response.choices[0].message.content
 		?.replace(/```json|```/g, "")
 		.trim();
 	const bookArray = JSON.parse(bookArrayString || "");
 
-	//   const bookArray = [
-	//     { bookTitle: "The Diary of a CEO", author: "Steven Bartlett" },
-	//     { bookTitle: "Invisible Women", author: "Caroline Criado Perez" },
-	//     { bookTitle: "Where Good Ideas Come From", author: "Steven Johnson" },
-	//     { bookTitle: "The Narrows", author: "Michael Connelly" },
-	//     { bookTitle: "The Drop", author: "Michael Connelly" },
-	//     { bookTitle: "The Black Ice", author: "Michael Connelly" },
-	//     { bookTitle: "Emotional Intelligence", author: "Daniel Goleman" },
-	//     { bookTitle: "How to Read a Book", author: "Mortimer J. Adler" },
-	//     { bookTitle: "The Unfair Advantage", author: "Ash Ali" },
-	//     { bookTitle: "The Collingridge Dilemma", author: "Jared Cohen" },
-	//   ];
+	*/
+
+	 const bookArray = [
+		 { bookTitle: "The Diary of a CEO", author: "Steven Bartlett" },
+		 { bookTitle: "Invisible Women", author: "Caroline Criado Perez" },
+		 { bookTitle: "Where Good Ideas Come From", author: "Steven Johnson" },
+		 { bookTitle: "The Narrows", author: "Michael Connelly" },
+		 { bookTitle: "The Drop", author: "Michael Connelly" },
+		 { bookTitle: "The Black Ice", author: "Michael Connelly" },
+		 { bookTitle: "Emotional Intelligence", author: "Daniel Goleman" },
+		 { bookTitle: "How to Read a Book", author: "Mortimer J. Adler" },
+		 { bookTitle: "The Unfair Advantage", author: "Ash Ali" },
+		 { bookTitle: "The Collingridge Dilemma", author: "Jared Cohen" },
+	 ];
 
 	return json({ bookArray });
 };
