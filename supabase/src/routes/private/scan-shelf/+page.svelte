@@ -1,70 +1,84 @@
 <script lang="ts">
-import Dropzone from 'svelte-file-dropzone';
-import Icon from '@iconify/svelte';
-import { convertFileToBase64 } from '$lib/utils/openai-helpers';
+	import Dropzone from 'svelte-file-dropzone';
+	import Icon from '@iconify/svelte';
+	import { convertFileToBase64 } from '$lib/utils/openai-helpers';
 
-let isLoading = $state(false);
-let errorMessage = $state("");
+	let isLoading = $state(false);
+	let errorMessage = $state("");
+	let recognizedBooks = $state<OpenAiBook[]>([]);
 
-interface OpenAiBook {
-	author: string;
-	bookTitle: string;
-}
-
-async function handleDrop(e: CustomEvent) {
-	const { acceptedFiles} = e.detail;
-
-	if (acceptedFiles.length) {
-		isLoading = true;
-		const fileToSendToOpenAi = acceptedFiles[0];
-		const base64String = await convertFileToBase64(fileToSendToOpenAi);
-
-		try {
-			const response = await fetch("/api/scan-shelf", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ base64: base64String }),
-			});
-
-			isLoading = false;
-			const result = await response.json() as {bookArray: OpenAiBook[] };
-		} catch (error) {
-			errorMessage = "Error processing the uploaded file.";
-		}
-	} else {
-		errorMessage = "Could not upload given file. Are you sure it's an image with a file size of les than 10MB?"
+	interface OpenAiBook {
+		author: string;
+		bookTitle: string;
 	}
-}
+
+	async function handleDrop(e: CustomEvent) {
+		const { acceptedFiles} = e.detail;
+
+		if (acceptedFiles.length) {
+			isLoading = true;
+			const fileToSendToOpenAi = acceptedFiles[0];
+			const base64String = await convertFileToBase64(fileToSendToOpenAi);
+
+			try {
+				const response = await fetch("/api/scan-shelf", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ base64: base64String }),
+				});
+
+				isLoading = false;
+				const result = await response.json() as {bookArray: OpenAiBook[] };
+				recognizedBooks = result.bookArray;
+
+			} catch (error) {
+				errorMessage = "Error processing the uploaded file.";
+			}
+		} else {
+			errorMessage = "Could not upload given file. Are you sure it's an image with a file size of les than 10MB?"
+		}
+	}
 </script>
 
 <h2 class="mt-m mb-l">Take a picture to add books</h2>
-<div class="upload-area">
-	<div class="upload-container">
-		{#if errorMessage}
-			<h4 class="text-center mb-s uploaded-error">{errorMessage}</h4>
-		{/if}
 
-		{#if isLoading}
-			<div class="spinner-container">
-				<div class="spinner"></div>
-				<p>Processing your books.</p>
-			</div>
-		{:else}
-			<Dropzone
-				on:drop={handleDrop}
-				multiple={false}
-				accept="image/*"
-				maxSize={10 * 1024 * 1024}
-				containerClasses={"dropzone-cover"}
-			>
-				<Icon icon="bi:camera-fill" width={40} height={40} />
-				<p>Drag a picture here or click to select a file</p>
-			</Dropzone>
-		{/if}
+{#if recognizedBooks.length === 0}
+	<div class="upload-area">
+		<div class="upload-container">
+			{#if errorMessage}
+				<h4 class="text-center mb-s uploaded-error">{errorMessage}</h4>
+			{/if}
+
+			{#if isLoading}
+				<div class="spinner-container">
+					<div class="spinner"></div>
+					<p>Processing your books.</p>
+				</div>
+			{:else}
+				<Dropzone
+					on:drop={handleDrop}
+					multiple={false}
+					accept="image/*"
+					maxSize={10 * 1024 * 1024}
+					containerClasses={"dropzone-cover"}
+				>
+					<Icon icon="bi:camera-fill" width={40} height={40} />
+					<p>Drag a picture here or click to select a file</p>
+				</Dropzone>
+			{/if}
+		</div>
 	</div>
-</div>
+{:else}
+	<div class="found-books">
+		<ul>
+			{#each recognizedBooks as book}
+				<li>{book.bookTitle}</li>
+			{/each}
+		</ul>
+	</div>
+{/if}
 
 <style>
     .book-list {
