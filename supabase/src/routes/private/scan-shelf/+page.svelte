@@ -5,6 +5,11 @@ import { convertFileToBase64 } from '$lib/utils/openai-helpers';
 
 let isLoading = $state(false);
 
+interface OpenAiBook {
+	author: string;
+	bookTitle: string;
+}
+
 async function handleDrop(e: CustomEvent) {
 	const { acceptedFiles} = e.detail;
 
@@ -21,6 +26,8 @@ async function handleDrop(e: CustomEvent) {
 				},
 				body: JSON.stringify({ base64: base64String }),
 			});
+
+			const result = await response.json() as {bookArray: OpenAiBook[] };
 		} catch (error) {
 
 		}
