@@ -1,14 +1,8 @@
 <script lang="ts">
-	import { type Book, getUserState } from '$lib/state/user-state.svelte';
+	import { getUserState } from '$lib/state/user-state.svelte';
 	import { Button, StarRating } from '$components';
 	import Icon from '@iconify/svelte';
 	import Dropzone from 'svelte-file-dropzone';
-
-	interface BookPageProps {
-		data: {
-			book: Book;
-		}
-	}
 
 	let { data } = $props();
 	let userContext = getUserState();
@@ -53,7 +47,7 @@
 		await userContext.updateBook(book.id, { rating: newRating });
 	}
 
-	async function handleDrop(e: CustomEvent<any>) {
+	async function handleDrop(e: CustomEvent) {
 		const { acceptedFiles } = e.detail;
 
 		if (acceptedFiles.length) {
@@ -154,7 +148,7 @@
 					containerClasses={"dropzone-cover"} >
 					<button class="add-cover">
 						<Icon icon="bi:camera-fill" width={40} height={40} />
-						<p>Add book cover</p>
+						Add book cover
 					</button>
 				</Dropzone>
 			{/if}
@@ -221,7 +215,6 @@
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
-        border: unset !important;
         cursor: pointer;
         border-style: solid !important;
     }
