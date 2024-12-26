@@ -2,6 +2,7 @@
 	import { type Book, getUserState } from '$lib/state/user-state.svelte';
 	import { Button, StarRating } from '$components';
 	import Icon from '@iconify/svelte';
+	import Dropzone from 'svelte-file-dropzone';
 
 	interface BookPageProps {
 		data: {
@@ -51,6 +52,15 @@
 	async function updateDatabaseRating(newRating: number) {
 		await userContext.updateBook(book.id, { rating: newRating });
 	}
+
+	async function handleDrop(e: CustomEvent<any>) {
+		const { acceptedFiles } = e.detail;
+
+		if (acceptedFiles.length) {
+			const file = acceptedFiles[0] as File;
+			await userContext.updateBookCover(file, book.id);
+		}
+	}
 </script>
 
 {#snippet bookInfo()}
@@ -67,9 +77,7 @@
 	{:else}
 		<h4 class="mt-m mb-xs semi-bold">No description yet.</h4>
 		<button class="block mb-m" onclick={() => console.log('clicked')}>
-			<p>
 				Click to add one.
-			</p>
 		</button>
 	{/if}
 
@@ -138,10 +146,17 @@
 			{#if book.cover_image}
 				<img src={book.cover_image} alt="cover" />
 			{:else}
-				<button class="add-cover">
-					<Icon icon="bi:camera-fill" width={40} height={40} />
-					<p>Add book cover</p>
-				</button>
+				<Dropzone
+					on:drop={handleDrop}
+					multiple={false}
+					accept="image/*"
+					maxSize={5 * 1024 * 1024}
+					containerClasses={"dropzone-cover"} >
+					<button class="add-cover">
+						<Icon icon="bi:camera-fill" width={40} height={40} />
+						<p>Add book cover</p>
+					</button>
+				</Dropzone>
 			{/if}
 		</div>
 	</div>
