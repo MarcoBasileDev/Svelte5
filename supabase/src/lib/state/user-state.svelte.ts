@@ -92,9 +92,11 @@ export class UserState {
 	getUnreadBooks() {
 		return this.allBooks
 			.filter((book) => !book.started_reading_on)
-			.toSorted((a, z) =>
-				new Date(z.created_at).getTime() -
-				new Date(a.created_at).getTime())
+			.toSorted(
+				(a, z) =>
+					new Date(z.created_at).getTime() - new Date(a.created_at).getTime()
+			)
+			.slice(0, 9);
 	}
 
 	getFavoriteGenre() {
@@ -124,6 +126,18 @@ export class UserState {
 		return mostCommonGenre || "";
 	}
 
+	getBooksFromFavoriteGenre() {
+		const mostCommonGenre = this.getFavoriteGenre();
+
+		return this.allBooks
+			.filter((book) => book.genre?.includes(mostCommonGenre))
+			.toSorted((a, z) => {
+				const ratingA = a.rating || 0;
+				const ratingZ = z.rating || 0;
+				return ratingZ - ratingA;
+			});
+	}
+
 	getBookById(bookId: number) {
 		return this.allBooks.find((book) => book.id === bookId);
 	}
@@ -133,35 +147,43 @@ export class UserState {
 			return;
 		}
 
-		const { status, error} = await this.supabase.from("books").update(updateObject).eq("id", bookId);
+		const { status, error } = await this.supabase
+			.from("books")
+			.update(updateObject)
+			.eq("id", bookId);
 
-		if( status === 204 && !error ) {
+		if (status === 204 && !error) {
 			this.allBooks = this.allBooks.map((book) => {
-			if (book.id === bookId) {
-				return {
-					...book,
-					...updateObject,
-				};
-			} else {
-				return book;
-			}
-			})
+				if (book.id === bookId) {
+					return {
+						...book,
+						...updateObject,
+					};
+				} else {
+					return book;
+				}
+			});
 		}
 	}
 
-	async updateBookCover(file: File, bookId: number) {
-		if (!this.supabase || !this.user) {
+	async uploadBookCover(file: File, bookId: number) {
+		if (!this.user || !this.supabase) {
 			return;
 		}
 
 		const filePath = `${this.user.id}/${new Date().getTime()}_${file.name}`;
-		const { error: uploadError } = await this.supabase.storage.from('book-covers').upload(filePath, file);
+		const { error: uploadError } = await this.supabase.storage
+			.from("book-covers")
+			.upload(filePath, file);
 
 		if (uploadError) {
-			console.error(uploadError);
+			return console.log(uploadError);
 		}
 
-		const { data: { publicUrl }} = this.supabase.storage.from('book-covers').getPublicUrl(filePath);
+		const {
+			data: { publicUrl },
+		} = this.supabase.storage.from("book-covers").getPublicUrl(filePath);
+
 		await this.updateBook(bookId, { cover_image: publicUrl });
 	}
 
@@ -170,12 +192,15 @@ export class UserState {
 			return;
 		}
 
-		const {error, status} = await this.supabase.from('books').delete().eq("id", bookId);
+		const { error, status } = await this.supabase
+			.from("books")
+			.delete()
+			.eq("id", bookId);
 		if (!error && status === 204) {
 			this.allBooks = this.allBooks.filter((book) => book.id !== bookId);
 		}
 
-		await goto("/private/dashboard");
+		goto("/private/dashboard");
 	}
 
 	async addBooksToLibrary(booksToAdd: OpenAiBook[]) {
@@ -185,26 +210,17 @@ export class UserState {
 
 		const userId = this.user.id;
 
-		const processedBooks = booksToAdd.map(book => ({
+		const processedBooks = booksToAdd.map((book) => ({
 			title: book.bookTitle,
 			author: book.author,
 			user_id: userId,
 		}));
 
-		const { error } = await this.supabase.from('books').insert(processedBooks);
-		if ( error ) {
+		const { error } = await this.supabase.from("books").insert(processedBooks);
+		if (error) {
 			throw new Error(error.message);
 		} else {
 			await this.fetchUserData();
-			/* Se non voglio tirare giu anche le info dell'utente che sarebbero un di più
-			const { data } = await this.supabase.from('books').select('*').eq("user_id", userId);
-
-			if(!data) {
-				throw new Error("Could not retrieve all books for user");
-			}
-			this.allBooks = data;
-
-			*/
 		}
 	}
 
@@ -217,26 +233,26 @@ export class UserState {
 			const response = await fetch("/api/update-account", {
 				method: "PATCH",
 				headers: {
-					"content-type": "application/json",
+					"Content-Type": "application/json",
 					Authorization: `Bearer ${this.session.access_token}`,
 				},
 				body: JSON.stringify({
 					email,
 					userName,
-				})
+				}),
 			});
 
-			if(response.ok) {
+			if (response.ok) {
 				this.userName = userName;
 			}
 		} catch (error) {
-			console.error(error);
+			console.log(`Failed to delete account:`, error);
 		}
- 	}
+	}
 
 	async logout() {
 		await this.supabase?.auth.signOut();
-		await goto("/login");
+		goto("/login");
 	}
 
 	async deleteAccount() {
@@ -248,20 +264,19 @@ export class UserState {
 			const response = await fetch("/api/delete-account", {
 				method: "DELETE",
 				headers: {
-					"ContentType": "application/json",
+					"Content-Type": "application/json",
 					Authorization: `Bearer ${this.session.access_token}`,
-				}
+				},
 			});
 
 			if (response.ok) {
 				await this.logout();
-				await goto("/");
+				goto("/");
 			}
-		} catch (e) {
-			console.error(e);
+		} catch (error) {
+			console.log("Failed to delete account:", error);
 		}
 	}
-
 }
 
 const USER_STATE_KEY = Symbol("USER_STATE");
