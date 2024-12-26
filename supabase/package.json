@@ -30,6 +30,7 @@
 		"@iconify/svelte": "^4.1.0",
 		"@supabase/ssr": "^0.5.2",
 		"@supabase/supabase-js": "^2.47.10",
+		"openai": "^4.77.0",
 		"svelte-file-dropzone": "^2.0.9"
 	}
 }
