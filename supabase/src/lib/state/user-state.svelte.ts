@@ -225,6 +225,10 @@ export class UserState {
 					userName,
 				})
 			});
+
+			if(response.ok) {
+				this.userName = userName;
+			}
 		} catch (error) {
 			console.error(error);
 		}
