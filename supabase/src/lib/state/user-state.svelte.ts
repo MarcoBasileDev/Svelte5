@@ -200,7 +200,7 @@ export class UserState {
 			this.allBooks = this.allBooks.filter((book) => book.id !== bookId);
 		}
 
-		goto("/private/dashboard");
+		await goto("/private/dashboard");
 	}
 
 	async addBooksToLibrary(booksToAdd: OpenAiBook[]) {
@@ -252,7 +252,7 @@ export class UserState {
 
 	async logout() {
 		await this.supabase?.auth.signOut();
-		goto("/login");
+		await goto("/login");
 	}
 
 	async deleteAccount() {
