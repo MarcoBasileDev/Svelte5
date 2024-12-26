@@ -1,8 +1,8 @@
 <script lang="ts">
 
-	import { type Book, getUserState } from '$lib/state/user-state.svelte';
+	import { getUserState } from '$lib/state/user-state.svelte';
 	import Icon from '@iconify/svelte';
-	import { BookCard, BookCategory, StarRating } from '$components';
+	import { BookCategory } from '$components';
 
 	let userContext = getUserState();
 	let { userName, allBooks } = $derived(userContext);
