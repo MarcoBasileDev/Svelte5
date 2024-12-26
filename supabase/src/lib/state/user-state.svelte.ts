@@ -196,7 +196,7 @@ export class UserState {
 			throw new Error(error.message);
 		} else {
 			await this.fetchUserData();
-			/*
+			/* Se non voglio tirare giu anche le info dell'utente che sarebbero un di più
 			const { data } = await this.supabase.from('books').select('*').eq("user_id", userId);
 
 			if(!data) {
@@ -207,6 +207,28 @@ export class UserState {
 			*/
 		}
 	}
+
+	async updateAccountData(email: string, userName: string) {
+		if (!this.session) {
+			return;
+		}
+
+		try {
+			const response = await fetch("/api/update-account", {
+				method: "PATCH",
+				headers: {
+					"content-type": "application/json",
+					Authorization: `Bearer ${this.session.access_token}`,
+				},
+				body: JSON.stringify({
+					email,
+					userName,
+				})
+			});
+		} catch (error) {
+			console.error(error);
+		}
+ 	}
 
 	async logout() {
 		await this.supabase?.auth.signOut();
